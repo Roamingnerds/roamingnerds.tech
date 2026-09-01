@@ -1,0 +1,40 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Function to fix accessibility for <a> tags
+    function fixLinksAccessibility() {
+        document.querySelectorAll('a').forEach((link) => {
+            // Check if the link has visible text or an aria-label attribute
+            const hasText = link.textContent.trim() !== '';
+            const hasAriaLabel = link.hasAttribute('aria-label');
+            const hasTitle = link.hasAttribute('title');
+
+            if (!hasText && !hasAriaLabel) {
+                // Generate an aria-label based on href, class, or generic fallback
+                const href = link.getAttribute('href') || '#';
+                const classes = link.className ? ` with class ${link.className}` : '';
+                const label = href === '#' ? `Unnamed link${classes}` : `Link to ${href}`;
+
+                // Set aria-label for accessibility
+                link.setAttribute('aria-label', label);
+
+                // Optionally add a title attribute (helps some users)
+                if (!hasTitle) {
+                    link.setAttribute('title', label);
+                }
+            }
+        });
+    }
+
+    // Run the function on page load
+    fixLinksAccessibility();
+
+    // Optional: Watch for dynamically loaded content using MutationObserver
+    const observer = new MutationObserver(() => {
+        fixLinksAccessibility();
+    });
+
+    // Observe changes to the body for dynamically injected content
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+    });
+});
