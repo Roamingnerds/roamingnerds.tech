@@ -32,8 +32,24 @@ jobs:
 
       - name: Prepare website
         run: |
-          mkdir _site
+          mkdir -p _site
+
+          # Main homepage
           cp -R roamingnerds/home-one-page/. _site/
+
+          # WordPress static assets
+          cp -R roamingnerds/wp-content _site/
+          cp -R roamingnerds/wp-includes _site/
+
+          # Other static pages/content
+          cp -R roamingnerds/about-us _site/ 2>/dev/null || true
+          cp -R roamingnerds/blog _site/ 2>/dev/null || true
+          cp -R roamingnerds/contact _site/ 2>/dev/null || true
+          cp -R roamingnerds/service _site/ 2>/dev/null || true
+          cp -R roamingnerds/team _site/ 2>/dev/null || true
+          cp -R roamingnerds/pricing _site/ 2>/dev/null || true
+          cp -R roamingnerds/project _site/ 2>/dev/null || true
+          cp -R roamingnerds/faq _site/ 2>/dev/null || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
